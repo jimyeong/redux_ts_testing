@@ -1,0 +1,107 @@
+@import "../../scss/variables.scss";
+#main {
+  .breadcrumb__wrapper {
+    color: #333;
+    font-size: 12px;
+    .divider {
+      color: inherit;
+    }
+    .section {
+      color: inherit;
+    }
+  }
+  .section__main {
+    position: relative;
+    margin-top: 32px;
+    @media only screen and (max-width: $md) {
+      padding-top: 48px;
+    }
+    .searchbar {
+      position: absolute;
+      right: 0;
+      top: -12px;
+
+      @media only screen and (max-width: $md) {
+        right: 0;
+        top: 0;
+      }
+    }
+  }
+  .main__tab {
+    > .menu {
+      @media only screen and (max-width: $md) {
+        overflow-x: scroll;
+        overflow-y: hidden;
+        width: 100%;
+      }
+    }
+    .item {
+      font-size: 12px;
+    }
+  }
+}
+
+.clearfix:after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.sp-btw {
+  justify-content: space-between;
+}
+
+.overflw-el {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cocktail__list {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  margin-left: -16px;
+
+  @media only screen and (max-width: $md) {
+    margin-left: 0;
+  }
+  .list__item {
+    box-sizing: border-box;
+    list-style: none;
+    float: left;
+    width: 20%;
+    padding-left: 16px;
+    padding-top: 16px;
+
+    @media only screen and (max-width: $md) {
+      float: none;
+      width: 100%;
+      padding-left: 0;
+      padding-top: 32px;
+      > .ui.card {
+        width: 100%;
+      }
+    }
+  }
+}
+.card {
+  .header {
+    height: 23px;
+    @media only screen and (max-width: $md) {
+      height: auto;
+    }
+  }
+  .description {
+    height: 120px;
+    @media only screen and (max-width: $md) {
+      height: 80px;
+    }
+  }
+}
+
+.ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
