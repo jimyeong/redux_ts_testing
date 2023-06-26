@@ -33,7 +33,9 @@ const CocktailCard = ({ item }: CocktailProps) => {
         <Image src={item.strDrinkThumb} />
       </div>
       <div className="content">
-        <div className="header ellipsis">{item.strDrink}</div>
+        <div role="cocktail_title" className="header ellipsis">
+          {item.strDrink}
+        </div>
         <div className="meta">{item.strCategory}</div>
         <div className="description">
           {utils.trim(item.strInstructions, 120)}
