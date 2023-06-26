@@ -16,15 +16,36 @@ const initialState = cocktailsAdapter.getInitialState({
   fetchedList: [],
 });
 
+type fetchCocktailParam = {
+  keyword: string;
+  firstLetter: string;
+};
 // AsyncThunk<any, void, AsyncThunkConfig>
 export const fetchCocktails = createAsyncThunk(
   "cocktails/fetchCocktails",
-  async (firstLetter: string) => {
-    console.log("@@first Letter@@", firstLetter);
-    const response = await axios.get(
-      `/api/json/v1/1/search.php?f=${firstLetter}`
-    );
-    return response.data;
+  async ({ keyword, firstLetter }: fetchCocktailParam) => {
+    if (keyword.length > 3) {
+      const strVal = keyword.trim();
+      const response = await axios.get(`/api/json/v1/1/search.php?s=${strVal}`);
+      let sortedByFirstLetter: ICocktail[] = [];
+      if (!response.data.drinks) {
+        response.data.drinks = sortedByFirstLetter;
+      }
+      if (response.data.drinks) {
+        response.data.drinks.forEach((element: ICocktail) => {
+          if (element.strDrink.substring(0, 1).toUpperCase() == firstLetter) {
+            sortedByFirstLetter.push(element);
+          }
+        });
+        response.data.drinks = sortedByFirstLetter;
+      }
+      return response.data;
+    } else {
+      const response = await axios.get(
+        `/api/json/v1/1/search.php?f=${firstLetter}`
+      );
+      return response.data;
+    }
   }
 );
 
