@@ -9,17 +9,16 @@ import {
   TabProps,
 } from "semantic-ui-react";
 import { NavLink } from "react-router-dom";
-import cn from "classnames";
 import "./MainPage.scss";
 import { onTabMenuChange, fetchCocktails } from "./features/cocktailsSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import { ThunkDispatch } from "@reduxjs/toolkit";
-import { AppDispatch, useAppDispatch } from "../../app/store";
+import { useAppDispatch } from "../../app/store";
 import CocktailCard, { ICocktail } from "./ui/CocktailCard";
-import List from "../../components/List/List";
-import _, { divide } from "lodash";
-import { axios } from "../../axios-util/axios-library-utility";
+import _ from "lodash";
+import cn from "classnames";
+import PieChart from "./ui/PieChart";
+import ChartsDisplay from "./ui/ChartsDisplay";
 
 const menus = [
   "A",
@@ -44,8 +43,11 @@ const menus = [
 const getCocktails = (state: RootState) => state.cocktails;
 
 const MainPage = () => {
-  const cocktails = useSelector(getCocktails);
+  const cocktails = useSelector(getCocktails); // redux pattern
   const { status, fetchedList, selectedTabIndex } = cocktails;
+
+  // as for searching keyword, I didn't put this in the redux store, I didn't want to get the whole App re-rendered whenever someone's typing
+  // especially when I am assuming there are more pages, but now we've got just one page.
   const [searchingKeyword, setSearchingKeyword] = useState("");
   const dispatch = useAppDispatch();
   const setMemu = () =>
@@ -54,12 +56,24 @@ const MainPage = () => {
         menuItem: menu,
         render: () => {
           if (status == "loading") {
+            //"ui bottom attached loading tab segment"
             return (
-              <TabPane className="ui bottom attached loading tab segment"></TabPane>
+              <TabPane
+                className={cn([
+                  "ui",
+                  "bottom",
+                  "attached",
+                  "loading",
+                  "tab",
+                  "segment",
+                ])}
+              ></TabPane>
             );
           } else if (status == "error") {
             return (
-              <TabPane className="ui bottom attached tab segment">
+              <TabPane
+                className={cn(["ui", "bottom", "attached", "tab", "segment"])}
+              >
                 <div>
                   <h2>Error has occured</h2>
                 </div>
@@ -67,21 +81,30 @@ const MainPage = () => {
             );
           } else {
             return (
-              <TabPane className="ui bottom attached tab segment">
+              <TabPane
+                className={cn(["ui", "bottom", "attached", "tab", "segment"])}
+              >
                 {fetchedList.length == 0 && (
                   <div>
                     <h2>No result</h2>
                   </div>
                 )}
-                <ul className="clearfix cocktail__list">
-                  {fetchedList.map((item, key) => {
+                <ul className={cn(["clearfix", " cocktail__list"])}>
+                  {fetchedList.map((item: ICocktail, key: number) => {
                     return (
-                      <li key={key} className="list__item">
+                      <li key={key} className={cn("list__item")}>
                         <CocktailCard item={item} key={key} />
                       </li>
                     );
                   })}
                 </ul>
+                <div className={cn(["mt15"])}>
+                  {fetchedList.length > 0 && (
+                    <React.Fragment>
+                      <ChartsDisplay data={cocktails.fetchedList} />
+                    </React.Fragment>
+                  )}
+                </div>
               </TabPane>
             );
           }
@@ -95,6 +118,7 @@ const MainPage = () => {
   ) => {
     const { value } = data;
 
+    // added debouncing function as the document stated
     _.debounce(() => {
       setSearchingKeyword(value ? value : "");
     }, 500)();
@@ -105,6 +129,9 @@ const MainPage = () => {
   ) => {
     const { activeIndex } = data;
 
+    // I used Redux Thunk, since I prefered the concept of middleware when you are using Redux store.
+    // it make the state updating function not only work in asyncrous way but also allow you to do some works that were not basically supposed to be done in reducer
+    // I believe it makes the code intuitively readable
     await dispatch(
       onTabMenuChange({
         selectedTabIndex: activeIndex,
@@ -112,6 +139,11 @@ const MainPage = () => {
       })
     );
   };
+
+  // since we need to find data with the first letter and searching keyword as well, I made this this way
+  // as I mentioned before, I used Thunk pattern, so all the logic is behind that function named "fetchCocktails"
+  // if you typed more than 3 characters, it will execute an API fetching data by name, but at the same time we are gonna use the first letter two, because the user would be on the tab panel
+  // otherwise it will just execute an API fetching data by the first letter(panel)
   useEffect(() => {
     dispatch(
       fetchCocktails({

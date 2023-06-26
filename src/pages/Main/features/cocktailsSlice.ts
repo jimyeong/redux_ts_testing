@@ -6,6 +6,8 @@ import {
 import { axios } from "../../../axios-util/axios-library-utility";
 import { ICocktail } from "../ui/CocktailCard";
 
+// id naming with createEntityAdapter, it has a thing to do with normalizing on Redux
+// it will get powerful when it runs tons of data.
 const cocktailsAdapter = createEntityAdapter<ICocktail>({
   selectId: () => "idDrink",
 });
@@ -20,7 +22,10 @@ type fetchCocktailParam = {
   keyword: string;
   firstLetter: string;
 };
-// AsyncThunk<any, void, AsyncThunkConfig>
+
+// a piece of thunk creation.
+// if it gets more than 3 characters typed, then it will excute an api fetching data by its name
+// otherwise it will bring data with the first letter.
 export const fetchCocktails = createAsyncThunk(
   "cocktails/fetchCocktails",
   async ({ keyword, firstLetter }: fetchCocktailParam) => {
@@ -48,6 +53,11 @@ export const fetchCocktails = createAsyncThunk(
     }
   }
 );
+
+// slice creation and extra reducer.
+// bascially you don't directly modify state object, like this ( state.a = "b")
+// in javascript, object refers to other object in a shallow copy way. so it will change the original state
+// but redux toolkit, it uses a library returning a new reference, so here it's safe using that way.
 
 const cocktailsSlice = createSlice({
   name: "cocktails",

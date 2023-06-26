@@ -13,6 +13,8 @@ const baseURL = "https://www.thecocktaildb.com/";
 const maxTryCount = 3;
 const retryCount = 0;
 
+// to add these attributes that are in need for error-handling process, I re-defined some types.
+
 type AxiosErrorHandlingProp = {
   maxTryCount: number;
   retryCount: number;
@@ -51,6 +53,9 @@ export const sleep = (ms: number) => {
 instance.interceptors.request.use(async (config) => {
   return config;
 }, null);
+
+// error handling code
+// if you failed fetching data with network issue or something, it will re request an api call up to 3times(declared up this file) with a 2seconds interval
 
 instance.interceptors.response.use(null, async (error) => {
   const { config } = error;
