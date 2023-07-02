@@ -130,7 +130,7 @@ const MainPage = () => {
     const { activeIndex } = data;
 
     // I used Redux Thunk, since I prefered the concept of middleware when you are using Redux store.
-    // it make the state updating function not only work in asyncrous way but also allow you to do some works that were not basically supposed to be done in reducer
+    // it make the state updating function not only work in syncrous way but also allow you to do some works that were not basically supposed to be done in reducer
     // I believe it makes the code intuitively readable
     await dispatch(
       onTabMenuChange({
