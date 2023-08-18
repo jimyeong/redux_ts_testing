@@ -1,5 +1,3 @@
-## BECG Group assignment
-
 ```
 // start the server
 $ npm install
