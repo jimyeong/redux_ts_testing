@@ -9,7 +9,7 @@ import axios, {
 } from "axios";
 
 const timeout = 5000;
-const baseURL = "https://www.thecocktaildb.com/";
+export const baseURL = "https://www.thecocktaildb.com/";
 const maxTryCount = 3;
 const retryCount = 0;
 

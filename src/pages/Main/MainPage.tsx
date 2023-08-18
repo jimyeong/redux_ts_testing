@@ -59,6 +59,7 @@ const MainPage = () => {
             //"ui bottom attached loading tab segment"
             return (
               <TabPane
+                role="loading__bar"
                 className={cn([
                   "ui",
                   "bottom",

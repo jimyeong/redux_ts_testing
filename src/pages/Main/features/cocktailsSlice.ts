@@ -11,7 +11,7 @@ import { ICocktail } from "../ui/CocktailCard";
 const cocktailsAdapter = createEntityAdapter<ICocktail>({
   selectId: () => "idDrink",
 });
-const initialState = cocktailsAdapter.getInitialState({
+export const initialState = cocktailsAdapter.getInitialState({
   status: "idle",
   selectedTabIndex: 0,
   error: "",
@@ -59,6 +59,7 @@ export const fetchCocktails = createAsyncThunk(
 // in javascript, object refers to other object in a shallow copy way. so it will change the original state
 // but redux toolkit, it uses a library returning a new reference, so here it's safe using that way.
 
+export type sliceType = typeof createSlice;
 const cocktailsSlice = createSlice({
   name: "cocktails",
   initialState,

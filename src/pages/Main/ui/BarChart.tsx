@@ -51,7 +51,11 @@ const BarChart = ({ data }: IChart) => {
     processedDataset.datasets[0].data.push(value);
   }
 
-  return <Bar data={processedDataset} />;
+  return (
+    <div role="bar__chart">
+      <Bar data={processedDataset} className="bar__chart" />
+    </div>
+  );
 };
 
 export default BarChart;

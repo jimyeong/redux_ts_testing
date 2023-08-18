@@ -39,7 +39,11 @@ const PieChart = ({ data }: IChart) => {
     proccessedDataset.labels!.push(key);
     proccessedDataset.datasets[0].data.push(value);
   }
-  return <Pie data={proccessedDataset} />;
+  return (
+    <div role="pie__chart">
+      <Pie data={proccessedDataset} className="pie__chart" />
+    </div>
+  );
 };
 
 export default PieChart;
